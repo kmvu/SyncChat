@@ -36,15 +36,15 @@ public class Common extends SeleneseTestBase {
 
     public static WebDriver driver;
 
-    public void clickAndWait(String locator) {
+    public static void clickAndWait(String locator) {
         driver.findElement(By.xpath(locator)).click();
     }
 
-    public void typeAndWait(String locator, String content) {
+    public static void typeAndWait(String locator, String content) {
         driver.findElement(By.xpath(locator)).sendKeys(content);
     }
 
-    public boolean isElementPresent(String locator) {
+    public static boolean isElementPresent(String locator) {
         return driver.findElement(By.xpath(locator)).isDisplayed();
     }
 

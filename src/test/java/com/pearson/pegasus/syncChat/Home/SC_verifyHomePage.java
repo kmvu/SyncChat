@@ -9,13 +9,11 @@ import org.testng.annotations.Test;
  */
 public class SC_verifyHomePage extends Common {
 
-    public HomeCommon homeCommon = new HomeCommon();
-
     @Test
     public void testLoginAsPublisher() throws InterruptedException {
-        homeCommon.loginAsPublisherFromHome();
+        HomeCommon.loginAsPublisherFromHome();
 
-        if (homeCommon.isElementPresent("//span[contains(., 'My Courses and Testbanks')]")) {
+        if (Common.isElementPresent("//span[contains(., 'My Courses and Testbanks')]")) {
             System.out.println("Successfully located!");
         } else {
             System.out.println("Nope!");
