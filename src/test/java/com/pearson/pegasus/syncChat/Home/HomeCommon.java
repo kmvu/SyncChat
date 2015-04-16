@@ -8,12 +8,11 @@ import org.openqa.selenium.WebDriver;
  */
 public class HomeCommon extends Common {
 
-    public static Common common = new Common();
     private static String syncChatUrl = "http://mylabs.px.ppe.pearsoncmg.com";
-    static WebDriver driver = common.driver;
+    static WebDriver driver = Common.driver;
 
     public static void loginAsPublisherFromHome() throws InterruptedException {
-        common.openBrowser(syncChatUrl);
+        Common.openBrowser(syncChatUrl);
 
         Thread.sleep(4000);
 
@@ -26,11 +25,11 @@ public class HomeCommon extends Common {
          *         2/ Type in Password
          *         3/ Click Submit
          */
-        common.typeAndWait(username_txtbox, "peg_ppe_hed_core_stud_1");
+        Common.typeAndWait(username_txtbox, "peg_ppe_hed_core_stud_1");
         Thread.sleep(2000);
-        common.typeAndWait(password_txtbox, "p@ssw0rd");
+        Common.typeAndWait(password_txtbox, "p@ssw0rd");
         Thread.sleep(2000);
-        common.clickAndWait(submit_button);
+        Common.clickAndWait(submit_button);
         Thread.sleep(10000);
     }
 
