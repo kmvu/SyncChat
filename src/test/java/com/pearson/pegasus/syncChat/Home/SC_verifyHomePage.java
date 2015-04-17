@@ -9,7 +9,7 @@ import org.testng.asserts.SoftAssert;
  * Created by KhangVu on 4/13/15.
  */
 public class SC_verifyHomePage extends Common {
-    
+
     public HomeCommon homeCommon = new HomeCommon();
     private SoftAssert softAssert = new SoftAssert();
 
@@ -18,10 +18,11 @@ public class SC_verifyHomePage extends Common {
         HomeCommon.loginAsPublisherFromHome();
 
         /* Checking login success */
-        softAssert.assertTrue(
-                homeCommon.isElementPresent("//span[contains(text(), 'My Courses and Testbanks')]"),
-                "Login not successfull!");
+        boolean titlePresent = homeCommon.isElementPresent("//span[contains(text(), 'My Courses and Testbanks')]");
+        softAssert.assertTrue(titlePresent, "Login not successfull!");
     }
+
+
 
     @AfterTest
     public void tearDown() {
