@@ -3,7 +3,9 @@ package com.pearson.pegasus.syncChat.library.common;
 import com.thoughtworks.selenium.SeleneseTestBase;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.support.ui.Select;
 
 import java.io.InputStream;
 import java.util.Properties;
@@ -36,6 +38,7 @@ public class Common extends SeleneseTestBase {
 
     public static WebDriver driver;
 
+    /* Common methods for UI */
     public static void clickAndWait(String locator) {
         driver.findElement(By.xpath(locator)).click();
     }
@@ -48,6 +51,15 @@ public class Common extends SeleneseTestBase {
         return driver.findElement(By.xpath(locator)).isDisplayed();
     }
 
+    public static void dropdownMenu(String locator, String optionItem) {
+        WebElement element = driver.findElement(By.xpath(locator));
+        Select selectionMenu = new Select(element);
+
+        selectionMenu.selectByVisibleText(optionItem);
+    }
+
+
+    /* Browser interaction methods */
     public static void openBrowser(String syncChatUrl) {
         driver = new FirefoxDriver();
         driver.get(syncChatUrl);

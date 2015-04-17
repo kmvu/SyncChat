@@ -20,9 +20,9 @@ public class SC_verifyHomePage extends Common {
         /* Checking login success */
         boolean titlePresent = homeCommon.isElementPresent("//span[contains(text(), 'My Courses and Testbanks')]");
         softAssert.assertTrue(titlePresent, "Login not successfull!");
+
+        Common.dropdownMenu("//a[@class='CourseCMenue']", "open");
     }
-
-
 
     @AfterTest
     public void tearDown() {
