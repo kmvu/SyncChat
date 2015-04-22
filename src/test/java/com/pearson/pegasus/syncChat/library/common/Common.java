@@ -1,14 +1,18 @@
 package com.pearson.pegasus.syncChat.library.common;
 
 import com.thoughtworks.selenium.SeleneseTestBase;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.remote.RemoteWebDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.Reporter;
 
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Properties;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by KhangVu on 4/13/15.
@@ -20,7 +24,8 @@ public class Common extends SeleneseTestBase {
     public static int timeoutSec = 180;
     public static long halfMinWait = 30000;
     public static int timeOut = 15;
-    public int timeoutInt = 18000;
+    public static int timeoutInt = 18000;
+    public static String timeout = "180000";
     public static long sleep = 1000;	//Never change this value
     public static String propertyFilePath = "/data/input/Config.properties";
     public static String configPropertyFilePath = "/data/input/ConfigurationSetUp.properties";
@@ -39,23 +44,215 @@ public class Common extends SeleneseTestBase {
     public static WebDriver driver;
 
     /* Common methods for UI */
-    public static void clickAndWait(String locator) {
-        driver.findElement(By.xpath(locator)).click();
+    public static void waitForPageToLoad(String timeout)
+    {
+        driver.manage().timeouts().implicitlyWait(Integer.parseInt("3"), TimeUnit.SECONDS);
+
+        String browser=getBrowserversion(driver);
+        if(browser.contains("chrome")){
+            waitForAjax(timeOut);
+        }
     }
 
-    public static void typeAndWait(String locator, String content) {
-        driver.findElement(By.xpath(locator)).sendKeys(content);
+    /**
+     * wait till web page is in ready state.
+     *
+     * @param timeoutInSeconds
+     *            Time till Web Driver waits.
+     */
+    private static void waitForAjax(int timeoutInSeconds) {
+        try {
+            if (driver instanceof JavascriptExecutor) {
+                JavascriptExecutor jsDriver = (JavascriptExecutor) driver;
+
+                for (int i = 0; i < timeoutInSeconds; i++) {
+                    boolean resultofAjaxWait = jsDriver.executeScript(
+                            "return document.readyState").equals("complete");
+                    Reporter.log("Ajex calls complete " + resultofAjaxWait);
+                    if (resultofAjaxWait) {
+                        break;
+                    }
+
+                    Thread.sleep(1000);
+                }
+            } else {
+                Reporter.log("ERROR : Web driver: " + driver
+                        + " cannot execute javascript");
+            }
+        } catch (InterruptedException e) {
+            Reporter.log("ERROR : Interrupted Exception " + e.getMessage());
+        }
+    }
+
+    public static String getBrowserversion(WebDriver driver)
+    {
+        Capabilities cap = ((RemoteWebDriver) driver).getCapabilities();
+        String browserName = cap.getBrowserName();
+        String browserVersion = cap.getVersion();
+        String browser = browserName + " " + browserVersion;
+        return browser;
+    }
+
+    /**
+     * This method is to click on given element and wait for page to load
+     * @param link: locator of any element
+     */
+    public static void clickAndWait(String link) {
+        if(!isElementPresent(link)){
+            waitForElementPresent(link);
+        }
+        click(link);
+        waitForPageToLoad(timeout);
+        waitForAjax(timeoutInt);
+    }
+
+    private static void click(String obj){
+        System.out.println("<<Click>>" + obj);
+        try {
+            //waitForElementPresent(obj);
+            WebElement query1= locator(obj);
+
+            query1.click();
+
+        }catch(Exception e)
+        {
+            System.out.println("not able to click on Object"+obj + e.getMessage());
+            fail("not able to click on Object"+obj );
+        }
+    }
+
+    public static WebElement locator(String locObj) {
+        WebElement query = null;
+        By by;
+        by=locatorBy(locObj);
+        try
+        {
+            try{
+                if (!driver.findElements(by).isEmpty()) {
+                    query=driver.findElement(by);
+                }
+                if (query==null) {
+                    by=By.name(locObj);
+                    if (!driver.findElements(by).isEmpty()) {
+                        query=driver.findElement(by);
+                    }
+                }
+            }
+            catch(NoSuchElementException te)
+            {
+                query=null;
+                System.out.println("*************catch1"+query);
+                if (query==null)
+                {
+                    by=By.name(locObj);
+                    if (!driver.findElements(by).isEmpty()){
+                        query=driver.findElement(by);
+                    }
+                }
+            }
+        }
+        catch(TimeoutException te){
+            query=null;
+            System.out.println("*************catch2"+query);
+            return query;
+        }
+        System.out.println("*************" + query);
+        return query;
+    }
+
+    public static void waitAndType(String searchBoxLocator, String optionName) {
+        WebElement element = driver.findElement(locatorBy(searchBoxLocator));
+        if(element.isDisplayed()) element.sendKeys(optionName);
     }
 
     public static boolean isElementPresent(String locator) {
         return driver.findElement(By.xpath(locator)).isDisplayed();
     }
 
-    public static void dropdownMenu(String locator, String optionItem) {
-        WebElement element = driver.findElement(By.xpath(locator));
-        Select selectionMenu = new Select(element);
+    public static void switchToFrame(int index){
+        driver.switchTo().defaultContent();
+        driver.switchTo().frame(index);
+    }
 
-        selectionMenu.selectByVisibleText(optionItem);
+    public static void switchToFrame(String locator){
+        driver.switchTo().defaultContent();
+        driver.switchTo().frame(locator);
+    }
+
+    public static void popUpSwitch(String locator) throws InterruptedException{
+        ArrayList<String> currentWindowList = new ArrayList<String>(driver.getWindowHandles());
+        waitForElementPresent(locator);
+        click(locator);
+
+        while (true) {
+            Thread.sleep(4000);
+            ArrayList<String> newWindowList = new ArrayList<String>(driver.getWindowHandles());
+            if (newWindowList.size() > currentWindowList.size()) {
+                driver.switchTo().window(newWindowList.get(newWindowList.size() - 1));
+                driver.manage().window().maximize();
+                currentWindowList = newWindowList;
+            } else break;
+        }
+    }
+
+    public static void waitForElementPresent(String element) {
+        System.out.println("waitForElementPresent>>" + element);
+        try{
+            WebDriverWait wait=new WebDriverWait(driver, timeOut);
+            wait.until(ExpectedConditions.visibilityOfElementLocated(locatorBy(element)));
+        }
+        catch(TimeoutException te){
+            System.out.println("*************");
+        }
+    }
+
+    public static By locatorBy(String locObj) {
+        By by=null;
+        try
+        {
+            if(locObj.startsWith("//"))
+            {
+                by=By.xpath(locObj);
+            }
+            else if(locObj.startsWith("link"))
+            {
+                String[] locObj1=locObj.split("link=");
+                System.out.println(locObj1[1]);
+                by=By.linkText(locObj1[1]);
+            }
+            else if(locObj.startsWith("css="))
+            {
+                String[] locObj1=locObj.split("css=");
+                System.out.println(locObj1[1]);
+                by=By.cssSelector(locObj1[1]);
+            }
+            else if(locObj.startsWith("id="))
+            {
+                String[] locObj1=locObj.split("id=");
+                System.out.println(locObj1[1]);
+                by=By.id(locObj1[1]);
+
+            }
+            else if(locObj.startsWith("name="))
+            {
+                String[] locObj1=locObj.split("name=");
+                System.out.println(locObj1[1]);
+                by=By.name(locObj1[1]);
+            }
+            else if(locObj.startsWith("label="))
+            {
+                String[] locObj1=locObj.split("label=");
+                System.out.println(locObj1[1]);
+                by=By.name(locObj1[1]);
+            }
+            else
+            {
+                by=By.id(locObj);
+            }
+        }
+        catch(NoSuchElementException e){}
+
+        return by;
     }
 
 
