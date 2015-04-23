@@ -2,13 +2,22 @@ package com.pearson.pegasus.syncChat.library.common;
 
 import com.thoughtworks.selenium.SeleneseTestBase;
 import org.openqa.selenium.*;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.firefox.FirefoxBinary;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxProfile;
+import org.openqa.selenium.firefox.internal.ProfilesIni;
+import org.openqa.selenium.ie.InternetExplorerDriver;
+import org.openqa.selenium.remote.CapabilityType;
+import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Reporter;
 
+import java.io.File;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Properties;
@@ -42,6 +51,49 @@ public class Common extends SeleneseTestBase {
     }
 
     public static WebDriver driver;
+
+    public static void setUpVLO(String browser,String URL) {
+        ProfilesIni allProfiles = new ProfilesIni();
+        FirefoxProfile profile = allProfiles.getProfile("SyncChat_profile");
+//        if(browser.equals("*iexplore")){
+//			/*capabilities.setCapability(CapabilityType.ENABLE_PERSISTENT_HOVERING , true);
+//		  capabilities.setCapability(CapabilityType.HAS_NATIVE_EVENTS , true);*/
+//            driver = new InternetExplorerDriver(capabilities);
+//        }else if(browser.equals("*chrome")){
+//            ChromeOptions options = new ChromeOptions();
+//            options.addArguments("--test-type");
+//            capabilities.setCapability(ChromeOptions.CAPABILITY, options);
+//            capabilities.setCapability(CapabilityType.HAS_NATIVE_EVENTS , true);
+//            System.setProperty("webdriver.chrome.driver", getClass().getResource("/data/input/chromedriver.exe").toString().replace("%20", " ").replace("file:",""));
+//            driver = new ChromeDriver(capabilities);
+//            System.out.println(DesiredCapabilities.chrome());
+//        }else if(browser.equals("*firefox")){
+            driver = new FirefoxDriver(profile);
+//            FirefoxBinary binary = new FirefoxBinary(new File("/Users/KhangVu/Library/Application Support/Firefox/Profiles/zo078t5r.SyncChat_profile"));
+//            FirefoxProfile profile = new FirefoxProfile();
+//            WebDriver driver = new FirefoxDriver(binary, profile);
+//        }
+//        else if(browser.equals("*safari")){
+//            capabilities.setCapability(CapabilityType.HAS_NATIVE_EVENTS , true);
+//            System.setProperty("webdriver.safari.driver", getClass().getResource("/data/input/safaridriver.exe").toString().replace("%20", " ").replace("file:",""));
+//            driver = new ChromeDriver(capabilities);
+//            System.out.println(DesiredCapabilities.chrome());
+//
+//        }
+//        else {
+//            System.out.println("Please selenium.select one of these browser:\niexplore\nfirefox\nchrome");
+//            return;
+//        }
+        driver.get(URL);
+
+        //driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+        //Setting the default PageLoad Time out to 2 Mins
+        driver.manage().timeouts().pageLoadTimeout(120 , TimeUnit.SECONDS);
+        //Setting the default Script Time out(the amount of time to wait for an asynchronous script to finish execution before throwing an error) to 2 Mins
+        driver.manage().timeouts().setScriptTimeout(120 ,TimeUnit.SECONDS);
+
+        driver.manage().window().maximize();
+    }
 
     /* Common methods for UI */
     public static void waitForPageToLoad(String timeout)

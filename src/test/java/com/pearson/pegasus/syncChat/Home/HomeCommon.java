@@ -12,7 +12,7 @@ public class HomeCommon extends Common {
     private static final String syncChatUrl = "http://mylabs.px.ppe.pearsoncmg.com";
 
     public static void loginAsPublisherFromHome() throws InterruptedException {
-        Common.openBrowser(syncChatUrl);
+//        Common.openBrowser(syncChatUrl);
 
         String username_txtbox_locator = HomeConstants.HomePage.USERNAME_TXTBOX.byLocator();
         String password_txtbox_locator = HomeConstants.HomePage.PASSWORD_TXTBOX.byLocator();

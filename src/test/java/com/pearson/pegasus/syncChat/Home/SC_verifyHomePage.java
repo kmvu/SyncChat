@@ -2,6 +2,7 @@ package com.pearson.pegasus.syncChat.Home;
 
 import com.pearson.pegasus.syncChat.library.common.Common;
 import org.testng.annotations.AfterTest;
+import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
 
@@ -12,6 +13,11 @@ public class SC_verifyHomePage extends Common {
 
     public HomeCommon homeCommon = new HomeCommon();
     private SoftAssert softAssert = new SoftAssert();
+
+    @BeforeTest
+    public void setup() {
+        Common.setUpVLO("*firefox", "http://mylabs.px.ppe.pearsoncmg.com");
+    }
 
     @Test
     public void testLoginAsPublisher() throws InterruptedException {
