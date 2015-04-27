@@ -20,7 +20,9 @@ import org.testng.Reporter;
 import java.io.File;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Properties;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -55,35 +57,13 @@ public class Common extends SeleneseTestBase {
     public static void setUpVLO(String browser,String URL) {
         ProfilesIni allProfiles = new ProfilesIni();
         FirefoxProfile profile = allProfiles.getProfile("SyncChat_profile");
-//        if(browser.equals("*iexplore")){
-//			/*capabilities.setCapability(CapabilityType.ENABLE_PERSISTENT_HOVERING , true);
-//		  capabilities.setCapability(CapabilityType.HAS_NATIVE_EVENTS , true);*/
-//            driver = new InternetExplorerDriver(capabilities);
-//        }else if(browser.equals("*chrome")){
-//            ChromeOptions options = new ChromeOptions();
-//            options.addArguments("--test-type");
-//            capabilities.setCapability(ChromeOptions.CAPABILITY, options);
-//            capabilities.setCapability(CapabilityType.HAS_NATIVE_EVENTS , true);
-//            System.setProperty("webdriver.chrome.driver", getClass().getResource("/data/input/chromedriver.exe").toString().replace("%20", " ").replace("file:",""));
-//            driver = new ChromeDriver(capabilities);
-//            System.out.println(DesiredCapabilities.chrome());
-//        }else if(browser.equals("*firefox")){
+
+        if (browser.equals("*firefox")) {
             driver = new FirefoxDriver(profile);
-//            FirefoxBinary binary = new FirefoxBinary(new File("/Users/KhangVu/Library/Application Support/Firefox/Profiles/zo078t5r.SyncChat_profile"));
-//            FirefoxProfile profile = new FirefoxProfile();
-//            WebDriver driver = new FirefoxDriver(binary, profile);
-//        }
-//        else if(browser.equals("*safari")){
-//            capabilities.setCapability(CapabilityType.HAS_NATIVE_EVENTS , true);
-//            System.setProperty("webdriver.safari.driver", getClass().getResource("/data/input/safaridriver.exe").toString().replace("%20", " ").replace("file:",""));
-//            driver = new ChromeDriver(capabilities);
-//            System.out.println(DesiredCapabilities.chrome());
-//
-//        }
-//        else {
-//            System.out.println("Please selenium.select one of these browser:\niexplore\nfirefox\nchrome");
-//            return;
-//        }
+        } else {
+            System.out.println("Please selenium.select one of these browser:\nfirefox\nchrome");
+            return;
+        }
         driver.get(URL);
 
         //driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
@@ -245,6 +225,40 @@ public class Common extends SeleneseTestBase {
                 currentWindowList = newWindowList;
             } else break;
         }
+    }
+
+    public static void popUpSwitch() throws InterruptedException{
+        ArrayList<String> currentWindowList = new ArrayList<String>(driver.getWindowHandles());
+
+        while (true) {
+            Thread.sleep(4000);
+            ArrayList<String> newWindowList = new ArrayList<String>(driver.getWindowHandles());
+            if (newWindowList.size() > currentWindowList.size()) {
+                driver.switchTo().window(newWindowList.get(newWindowList.size() - 1));
+                driver.getTitle();
+                driver.manage().window().maximize();
+                currentWindowList = newWindowList;
+            } else break;
+        }
+    }
+
+
+    public static void acceptInvitation() throws InterruptedException {
+        Set<String> windowId = driver.getWindowHandles(); // get  window id of current window
+        Iterator<String> itererator = windowId.iterator();
+
+        String mainWinID = itererator.next();
+        String  newAdwinID = itererator.next();
+
+        driver.switchTo().window(newAdwinID);
+        System.out.println(driver.getTitle());
+        Thread.sleep(3000);
+        clickAndWait("//a[@id='imgOk']//span");
+        driver.close();
+
+        driver.switchTo().window(mainWinID);
+        System.out.println(driver.getTitle());
+        Thread.sleep(2000);
     }
 
     public static void waitForElementPresent(String element) {

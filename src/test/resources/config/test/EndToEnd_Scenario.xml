@@ -2,10 +2,10 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
 <suite name="EndToEnd_Scenario" preserve-order="true">
 
-    <test name="Administrator" preserve-order="true">
+    <test name="Create_room" preserve-order="true">
         <classes>
             <class name="com.pearson.pegasus.syncChat.Home.SC_verifyHomePage"></class>
+            <class name="com.pearson.pegasus.syncChat.Home.SC_VerifyCreateAndJoinChatVideo"></class>"
         </classes>
     </test>
-
 </suite>

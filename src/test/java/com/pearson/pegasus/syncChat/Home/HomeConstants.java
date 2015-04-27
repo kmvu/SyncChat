@@ -43,13 +43,21 @@ public class HomeConstants {
          */
         OPEN_DROPDOWN_ITEM("", "", "//div[@id='PegMenu32']//span", ""),
         /**
+         * Create button
+         */
+        CREATE_BTN("", "", "//input[@value='Create a new chat room']", ""),
+        /**
          * "Join Room" button to join created room in popup window
          */
-        JOIN_BTN("", "", "//input[@id='joinRoom']", ""),
+        JOIN_CREATE_BTN("", "", "//input[@id='joinRoom']", ""),
         /**
          * "OK" button to ask for permission
          */
         OK_BTN("", "", "//div[@class='modal-footer']//a", ""),
+        /**
+         * Invite Users
+         */
+        INVITE_BTN("", "", "//div[@id='InviteUsers']", ""),
 
         ;
         private  String id;

@@ -1,19 +1,16 @@
 package com.pearson.pegasus.syncChat.Home;
 
 import com.pearson.pegasus.syncChat.library.common.Common;
+import org.testng.asserts.SoftAssert;
 
 /**
  * Created by KhangVu on 4/13/15.
  */
 public class HomeCommon extends Common {
 
-    private static final String username = "peg_ppe_hed_core_stud_1";
     private static final String password = "p@ssw0rd";
-    private static final String syncChatUrl = "http://mylabs.px.ppe.pearsoncmg.com";
 
-    public static void loginAsPublisherFromHome() throws InterruptedException {
-//        Common.openBrowser(syncChatUrl);
-
+    public static void loginAsPublisherFromHome(String username) throws InterruptedException {
         String username_txtbox_locator = HomeConstants.HomePage.USERNAME_TXTBOX.byLocator();
         String password_txtbox_locator = HomeConstants.HomePage.PASSWORD_TXTBOX.byLocator();
         String submit_button_locator = HomeConstants.HomePage.SUBMIT_BTN.byLocator();
@@ -33,6 +30,24 @@ public class HomeCommon extends Common {
         Thread.sleep(5000);
     }
 
+    public static SoftAssert setupBeforeVideoChat(SoftAssert softAssert) {
+        /* Checking login success */
+        boolean titlePresent = isElementPresent(HomeConstants.HomePage.HOME_TITLE.byLocator());
+        softAssert.assertTrue(titlePresent, "Login not successfull!");
 
+        /* Choosing the course */
+        Common.clickAndWait(HomeConstants.HomePage.COURSE_TITLE.byLocator());
+        Common.clickAndWait(HomeConstants.HomePage.ASSIGNMENT_TAB.byLocator());
+
+        /* Make sure user clicked on Assignments link and currently located in "To do" tab */
+        Common.clickAndWait(HomeConstants.HomePage.TODO_TAB.byLocator());
+
+        return softAssert;
+    }
+
+    public static void waitAndAcceptInvitation() throws InterruptedException {
+        Thread.sleep(15000);
+        Common.acceptInvitation();
+    }
 
 }
