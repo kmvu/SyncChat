@@ -56,7 +56,7 @@ public class Common extends SeleneseTestBase {
 
     public static void setUpVLO(String browser,String URL) {
         ProfilesIni allProfiles = new ProfilesIni();
-        FirefoxProfile profile = allProfiles.getProfile("SyncChat_profile");
+        FirefoxProfile profile = allProfiles.getProfile("WebDriver_SyncChat");
 
         if (browser.equals("*firefox")) {
             driver = new FirefoxDriver(profile);
@@ -227,9 +227,7 @@ public class Common extends SeleneseTestBase {
         }
     }
 
-    public static void popUpSwitch() throws InterruptedException{
-        ArrayList<String> currentWindowList = new ArrayList<String>(driver.getWindowHandles());
-
+    public static void popUpSwitch(ArrayList<String> currentWindowList) throws InterruptedException{
         while (true) {
             Thread.sleep(4000);
             ArrayList<String> newWindowList = new ArrayList<String>(driver.getWindowHandles());
@@ -243,7 +241,7 @@ public class Common extends SeleneseTestBase {
     }
 
 
-    public static void acceptInvitation() throws InterruptedException {
+    public static ArrayList<String> acceptInvitation() throws InterruptedException {
         Set<String> windowId = driver.getWindowHandles(); // get  window id of current window
         Iterator<String> itererator = windowId.iterator();
 
@@ -253,12 +251,14 @@ public class Common extends SeleneseTestBase {
         driver.switchTo().window(newAdwinID);
         System.out.println(driver.getTitle());
         Thread.sleep(3000);
-        clickAndWait("//a[@id='imgOk']//span");
-        driver.close();
+        click("//a[@id='imgOk']//span");
+        ArrayList<String> currentWindowList = new ArrayList<String>(driver.getWindowHandles());
 
         driver.switchTo().window(mainWinID);
         System.out.println(driver.getTitle());
         Thread.sleep(2000);
+        
+        return currentWindowList;
     }
 
     public static void waitForElementPresent(String element) {

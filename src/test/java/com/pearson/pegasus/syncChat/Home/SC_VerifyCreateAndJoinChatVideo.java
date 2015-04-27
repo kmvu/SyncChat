@@ -1,6 +1,9 @@
 package com.pearson.pegasus.syncChat.Home;
 
+import java.util.ArrayList;
+
 import com.pearson.pegasus.syncChat.library.common.Common;
+
 import org.testng.annotations.AfterTest;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
@@ -10,7 +13,6 @@ import org.testng.asserts.SoftAssert;
  */
 public class SC_VerifyCreateAndJoinChatVideo extends Common {
 
-    public HomeCommon homeCommon = new HomeCommon();
     private SoftAssert softAssert = new SoftAssert();
 
     private String anotherUser = "PEG_PPE_HED_Core_Stud_3";
@@ -39,18 +41,21 @@ public class SC_VerifyCreateAndJoinChatVideo extends Common {
     }
 
     @Test(dependsOnMethods = "testOpenVideoChatByHost")
-    public void testLogAnotherUserIn() throws InterruptedException {
+    public void testLoggingAnotherUserIn() throws InterruptedException {
+    	/* Open a new session for another user */
         Common.setUpVLO("*firefox", "http://mylabs.px.ppe.pearsoncmg.com");
 
-        homeCommon.loginAsPublisherFromHome(anotherUser.toLowerCase());
-        homeCommon.setupBeforeVideoChat(softAssert);
+        /* Login as whatever user got invitation */
+        HomeCommon.loginAsPublisherFromHome(anotherUser.toLowerCase());
+        HomeCommon.setupBeforeVideoChat(softAssert);
 
-        homeCommon.waitAndAcceptInvitation();
-        homeCommon.popUpSwitch();
+        /* Accept invitation */
+        ArrayList<String> currentWindowList = HomeCommon.waitAndAcceptInvitation();
+        Common.popUpSwitch(currentWindowList);
 
+        /* Join room */
         Common.clickAndWait(HomeConstants.HomePage.JOIN_CREATE_BTN.byLocator());
-        Common.clickAndWait(HomeConstants.HomePage.OK_BTN.byLocator());
-        Thread.sleep(2000);
+        Thread.sleep(10000);
     }
 
     @AfterTest

@@ -1,6 +1,9 @@
 package com.pearson.pegasus.syncChat.Home;
 
+import java.util.ArrayList;
+
 import com.pearson.pegasus.syncChat.library.common.Common;
+
 import org.testng.asserts.SoftAssert;
 
 /**
@@ -11,7 +14,7 @@ public class HomeCommon extends Common {
     private static final String password = "p@ssw0rd";
 
     public static void loginAsPublisherFromHome(String username) throws InterruptedException {
-        String username_txtbox_locator = HomeConstants.HomePage.USERNAME_TXTBOX.byLocator();
+    	String username_txtbox_locator = HomeConstants.HomePage.USERNAME_TXTBOX.byLocator();
         String password_txtbox_locator = HomeConstants.HomePage.PASSWORD_TXTBOX.byLocator();
         String submit_button_locator = HomeConstants.HomePage.SUBMIT_BTN.byLocator();
 
@@ -45,9 +48,9 @@ public class HomeCommon extends Common {
         return softAssert;
     }
 
-    public static void waitAndAcceptInvitation() throws InterruptedException {
+    public static ArrayList<String> waitAndAcceptInvitation() throws InterruptedException {
         Thread.sleep(15000);
-        Common.acceptInvitation();
+        return Common.acceptInvitation();
     }
 
 }

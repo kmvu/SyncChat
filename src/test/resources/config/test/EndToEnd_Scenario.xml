@@ -4,7 +4,7 @@
 
     <test name="Create_room" preserve-order="true">
         <classes>
-            <class name="com.pearson.pegasus.syncChat.Home.SC_verifyHomePage"></class>
+        	<class name="com.pearson.pegasus.syncChat.Home.SC_verifyHomePage"></class>
             <class name="com.pearson.pegasus.syncChat.Home.SC_VerifyCreateAndJoinChatVideo"></class>"
         </classes>
     </test>
