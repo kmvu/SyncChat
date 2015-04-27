@@ -16,12 +16,12 @@ public class SC_verifyHomePage extends Common {
 
     @BeforeTest
     public void setup() {
-        Common.setUpVLO("*firefox", "http://mylabs.px.ppe.pearsoncmg.com");
+        Common.setUpVLO("*firefox", "http://mylabs.px.pearsoned.com/Pegasus/frmLogin.aspx?logout=1&s=3");
     }
 
     @Test
     public void testLoginAsHostPublisher() throws InterruptedException {
-        HomeCommon.loginAsPublisherFromHome("peg_ppe_hed_core_stud_1");
+        HomeCommon.loginAsPublisherFromHome("chaos_avchat_stud_1");
         HomeCommon.setupBeforeVideoChat(softAssert);
     }
 

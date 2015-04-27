@@ -25,7 +25,7 @@ public class HomeConstants {
         /**
          * Course title
          */
-        COURSE_TITLE("", "", "//a[contains(., ' Admin PE AVChat Section 1')]", ""),
+        COURSE_TITLE("", "", "//a[contains(., 'Chaos Course1 PE AVChat Section 1')]", ""),
         /**
          * Assignment tab
          */

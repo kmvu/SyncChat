@@ -15,7 +15,7 @@ public class SC_VerifyCreateAndJoinChatVideo extends Common {
 
     private SoftAssert softAssert = new SoftAssert();
 
-    private String anotherUser = "PEG_PPE_HED_Core_Stud_3";
+    private String anotherUser = "chaos_avchat_stud_2";
 
     @Test
     public void testOpenVideoChatByHost() throws InterruptedException {
@@ -34,16 +34,12 @@ public class SC_VerifyCreateAndJoinChatVideo extends Common {
         Common.clickAndWait(HomeConstants.HomePage.JOIN_CREATE_BTN.byLocator());
         Common.clickAndWait(HomeConstants.HomePage.OK_BTN.byLocator());
         Thread.sleep(2000);
-
-        Common.clickAndWait("//div[@id='buddies']//div[contains(., '" + anotherUser +"')]/../following-sibling::div//input");
-        Common.clickAndWait(HomeConstants.HomePage.INVITE_BTN.byLocator());
-        Thread.sleep(4000);
     }
 
     @Test(dependsOnMethods = "testOpenVideoChatByHost")
     public void testLoggingAnotherUserIn() throws InterruptedException {
     	/* Open a new session for another user */
-        Common.setUpVLO("*firefox", "http://mylabs.px.ppe.pearsoncmg.com");
+        Common.setUpVLO("*firefox", "http://mylabs.px.pearsoned.com/Pegasus/frmLogin.aspx?logout=1&s=3");
 
         /* Login as whatever user got invitation */
         HomeCommon.loginAsPublisherFromHome(anotherUser.toLowerCase());
@@ -55,7 +51,11 @@ public class SC_VerifyCreateAndJoinChatVideo extends Common {
 
         /* Join room */
         Common.clickAndWait(HomeConstants.HomePage.JOIN_CREATE_BTN.byLocator());
-        Thread.sleep(10000);
+        Thread.sleep(5000);
+        
+        Common.clickAndWait("//div[@id='buddies']//div[contains(., '" + anotherUser + "')]/../following-sibling::div//input");
+        Common.clickAndWait(HomeConstants.HomePage.INVITE_BTN.byLocator());
+        Thread.sleep(4000);
     }
 
     @AfterTest

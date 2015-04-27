@@ -57,7 +57,7 @@ public class Common extends SeleneseTestBase {
     public static void setUpVLO(String browser,String URL) {
         ProfilesIni allProfiles = new ProfilesIni();
         FirefoxProfile profile = allProfiles.getProfile("WebDriver_SyncChat");
-
+    	
         if (browser.equals("*firefox")) {
             driver = new FirefoxDriver(profile);
         } else {
@@ -236,7 +236,9 @@ public class Common extends SeleneseTestBase {
                 driver.getTitle();
                 driver.manage().window().maximize();
                 currentWindowList = newWindowList;
-            } else break;
+            } else {
+            	break;
+            }
         }
     }
 
