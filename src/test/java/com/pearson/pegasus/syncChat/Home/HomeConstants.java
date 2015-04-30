@@ -58,6 +58,22 @@ public class HomeConstants {
          * Invite Users
          */
         INVITE_BTN("", "", "//div[@id='InviteUsers']", ""),
+        /**
+         * Invitation Accept button
+         */
+        ACCEPT_BTN("", "", "//a[@id='imgOk']//span", ""),
+        /**
+         * Invitation Deny button
+         */
+        DENY_BTN("", "", "//a[@id='imgCancel']//span", ""),
+        /**
+         * Chat room welcome title
+         */
+        WELCOME_TITLE("", "", "//h5[contains(., 'Welcome to AVChat Assessment')]", ""),
+        /**
+         * Join existing chat room as subscriber
+         */
+        JOIN_SUBSCRIBER("", "", "//input[@value='Join an existing chat room']", ""),
 
         ;
         private  String id;

@@ -1,6 +1,8 @@
 package com.pearson.pegasus.syncChat.library.common;
 
+import com.pearson.pegasus.syncChat.Home.HomeConstants;
 import com.thoughtworks.selenium.SeleneseTestBase;
+
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -206,9 +208,14 @@ public class Common extends SeleneseTestBase {
         driver.switchTo().frame(index);
     }
 
-    public static void switchToFrame(String locator){
+    public static void switchToFrameOrWindow(String locator){
         driver.switchTo().defaultContent();
         driver.switchTo().frame(locator);
+    }
+    
+    public static void switchToWindow(String handle) {
+    	driver.switchTo().defaultContent();
+    	driver.switchTo().window(handle);
     }
 
     public static void popUpSwitch(String locator) throws InterruptedException{
@@ -243,7 +250,7 @@ public class Common extends SeleneseTestBase {
     }
 
 
-    public static ArrayList<String> acceptInvitation() throws InterruptedException {
+    public static ArrayList<String> invitationHandler(boolean action) throws InterruptedException {
         Set<String> windowId = driver.getWindowHandles(); // get  window id of current window
         Iterator<String> itererator = windowId.iterator();
 
@@ -253,7 +260,12 @@ public class Common extends SeleneseTestBase {
         driver.switchTo().window(newAdwinID);
         System.out.println(driver.getTitle());
         Thread.sleep(3000);
-        click("//a[@id='imgOk']//span");
+
+        if (action) { // action == true is accept, and vice versa
+            click(HomeConstants.HomePage.ACCEPT_BTN.byLocator());
+        } else {
+            click(HomeConstants.HomePage.DENY_BTN.byLocator());
+        }
         ArrayList<String> currentWindowList = new ArrayList<String>(driver.getWindowHandles());
 
         driver.switchTo().window(mainWinID);

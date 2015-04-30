@@ -1,10 +1,9 @@
 package com.pearson.pegasus.syncChat.Home;
 
-import java.util.ArrayList;
-
 import com.pearson.pegasus.syncChat.library.common.Common;
-
 import org.testng.asserts.SoftAssert;
+
+import java.util.ArrayList;
 
 /**
  * Created by KhangVu on 4/13/15.
@@ -13,7 +12,7 @@ public class HomeCommon extends Common {
 
     private static final String password = "p@ssw0rd";
 
-    public static void loginAsPublisherFromHome(String username) throws InterruptedException {
+    public static void loginFromHome(String username) throws InterruptedException {
     	String username_txtbox_locator = HomeConstants.HomePage.USERNAME_TXTBOX.byLocator();
         String password_txtbox_locator = HomeConstants.HomePage.PASSWORD_TXTBOX.byLocator();
         String submit_button_locator = HomeConstants.HomePage.SUBMIT_BTN.byLocator();
@@ -50,7 +49,44 @@ public class HomeCommon extends Common {
 
     public static ArrayList<String> waitAndAcceptInvitation() throws InterruptedException {
         Thread.sleep(15000);
-        return Common.acceptInvitation();
+        return Common.invitationHandler(true);
     }
+
+    public static ArrayList<String> waitAndDenyInvitation() throws InterruptedException {
+        Thread.sleep(15000);
+        return Common.invitationHandler(false);
+    }
+
+    /* Subscriber actions */
+    public static SoftAssert subscriberLogin(String subscriberAccount, SoftAssert softAssert) throws InterruptedException {
+        /* Open a new session for Subscriber */
+        Common.setUpVLO("*firefox", "http://mylabs.px.pearsoned.com/Pegasus/frmLogin.aspx?logout=1&s=3");
+
+        /* Login as invited Subscriber */
+        HomeCommon.loginFromHome(subscriberAccount.toLowerCase());
+
+        return HomeCommon.setupBeforeVideoChat(softAssert);
+    }
+
+    public static void subscriberAcceptInvitation() throws InterruptedException {
+        /* Accept invitation */
+        ArrayList<String> currentWindowList = HomeCommon.waitAndAcceptInvitation();
+        Common.popUpSwitch(currentWindowList);
+
+        /* Join room */
+        Common.clickAndWait(HomeConstants.HomePage.JOIN_CREATE_BTN.byLocator());
+        Thread.sleep(5000);
+    }
+
+    public static void subscriberDenyInvitation() throws InterruptedException {
+        /* Deny invitation */
+        ArrayList<String> currentWindowList = HomeCommon.waitAndAcceptInvitation();
+        Common.popUpSwitch(currentWindowList);
+
+        /* Join room */
+        Common.clickAndWait(HomeConstants.HomePage.JOIN_CREATE_BTN.byLocator());
+        Thread.sleep(5000);
+    }
+
 
 }

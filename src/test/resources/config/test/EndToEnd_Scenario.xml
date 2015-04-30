@@ -4,8 +4,14 @@
 
     <test name="Create_room" preserve-order="true">
         <classes>
-        	<class name="com.pearson.pegasus.syncChat.Home.SC_verifyHomePage"></class>
-            <class name="com.pearson.pegasus.syncChat.Home.SC_VerifyCreateAndJoinChatVideo"></class>"
+        	<class name="com.pearson.pegasus.syncChat.Home.SC_PublisherAndSubscriberCommunication"></class>
         </classes>
     </test>
+
+    <!--<test name="Deny_invitation" preserve-order="true">-->
+        <!--<classes>-->
+            <!--<class name="com.pearson.pegasus.syncChat.Home.SC_PublisherAndSubscriberCommunication"></class>-->
+            <!--<class name="com.pearson.pegasus.syncChat.Home.SC_VerifyCreateAndJoinChatVideoDenied"></class>-->
+        <!--</classes>-->
+    <!--</test>-->
 </suite>
