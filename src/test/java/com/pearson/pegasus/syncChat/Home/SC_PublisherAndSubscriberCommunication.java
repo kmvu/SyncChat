@@ -1,0 +1,86 @@
+package com.pearson.pegasus.syncChat.Home;
+
+import com.pearson.pegasus.syncChat.library.common.Common;
+import org.testng.annotations.AfterTest;
+import org.testng.annotations.BeforeTest;
+import org.testng.annotations.Test;
+import org.testng.asserts.SoftAssert;
+
+/**
+ * Created by KhangVu on 4/13/15.
+ */
+public class SC_PublisherAndSubscriberCommunication extends Common {
+
+    private SoftAssert softAssert = new SoftAssert();
+
+    private final String publisherAccount = "chaos_avchat_stud_2";
+    private final String subscriberAccount = "chaos_avchat_stud_5";
+
+    @BeforeTest
+    public void setup() {
+        Common.setUpVLO("*firefox", "http://mylabs.px.pearsoned.com/Pegasus/frmLogin.aspx?logout=1&s=3");
+    }
+
+    @Test
+    public void testLoginAsPublisher() throws InterruptedException {
+        HomeCommon.loginFromHome(publisherAccount);
+        HomeCommon.setupBeforeVideoChat(softAssert);
+
+        /* Select the video by selecting the dropdown menu */
+        Common.switchToFrame(1);
+        Common.clickAndWait(HomeConstants.HomePage.DROPDOWN_VIDEO_MENU.byLocator());
+
+        /* 1/ Switch window handle to pop-up video chat window
+         * 2/ Wait click on "Create Room" button to present
+         * 3/ Wait and click to confirm permission to share video */
+        Common.popUpSwitch(HomeConstants.HomePage.OPEN_DROPDOWN_ITEM.byLocator());
+
+        Common.clickAndWait(HomeConstants.HomePage.JOIN_CREATE_BTN.byLocator());
+        Thread.sleep(2000);
+    }
+
+    @Test(dependsOnMethods = "testLoginAsPublisher")
+    public void testLoginAsSubscriberAndJoinChatRoom() throws InterruptedException {
+        /* Login as another subscriber to join the created room chat */
+        HomeCommon.subscriberLogin(subscriberAccount, softAssert);
+
+        /* Select the video by selecting the dropdown menu */
+        Common.switchToFrame(1);
+        Common.clickAndWait(HomeConstants.HomePage.DROPDOWN_VIDEO_MENU.byLocator());
+
+        Common.popUpSwitch(HomeConstants.HomePage.OPEN_DROPDOWN_ITEM.byLocator());
+
+        if (Common.isElementPresent(HomeConstants.HomePage.WELCOME_TITLE.byLocator())) {
+            Common.clickAndWait(HomeConstants.HomePage.JOIN_SUBSCRIBER.byLocator());
+
+            String tempLoc = "//td[contains(., 'chaos_avchat_stud_1 chaos_avchat_stud_1')]";
+            Common.waitForElementPresent(tempLoc);
+            Common.clickAndWait(tempLoc + "//following-sibling::td/input");
+        } else {
+            System.out.println("\nCannot open Chat room for some reason! Please try again!");
+        }
+
+        Common.clickAndWait(HomeConstants.HomePage.JOIN_CREATE_BTN.byLocator());
+        Thread.sleep(10000);
+
+
+
+        /* Waiting for Subscriber to login */
+//        String currentWindow = Common.driver.getWindowHandle(); // get the handle for current popup
+//        HomeCommon.subscriberLogin(softAssert);
+//
+//        /* Invite Subscriber and waiting for acceptance */
+//        Common.switchToWindow(currentWindow);
+//        Common.clickAndWait("//div[@id='buddies']//div[contains(., '" + anotherUser + "')]/../following-sibling::div//input");
+//        Common.clickAndWait(HomeConstants.HomePage.INVITE_BTN.byLocator());
+//        Thread.sleep(4000);
+//
+//        HomeCommon.subscriberAcceptInvitation();
+    }
+
+    @AfterTest
+    public void tearDown() {
+        Common.closeBrowser();
+        softAssert.assertAll();
+    }
+}
