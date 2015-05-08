@@ -47,6 +47,12 @@ public class HomeCommon extends Common {
         return softAssert;
     }
 
+    public static void submitForGrading() {
+        Common.clickAndWait(HomeConstants.HomePage.GRADING_BTN.byLocator());
+        Common.clickAndWait(HomeConstants.HomePage.FINISH_BTN.byLocator());
+        Common.clickAndWait(HomeConstants.HomePage.RETURN_TO_COURSE.byLocator());
+    }
+
     public static ArrayList<String> waitAndAcceptInvitation() throws InterruptedException {
         Thread.sleep(15000);
         return Common.invitationHandler(true);
@@ -61,7 +67,7 @@ public class HomeCommon extends Common {
     public static SoftAssert subscriberLogin(String subscriberAccount, SoftAssert softAssert) throws InterruptedException {
         /* Open a new session for Subscriber */
         Common.setUpVLO("*firefox", "http://mylabs.px.pearsoned.com/Pegasus/frmLogin.aspx?logout=1&s=3");
-
+    	
         /* Login as invited Subscriber */
         HomeCommon.loginFromHome(subscriberAccount.toLowerCase());
 

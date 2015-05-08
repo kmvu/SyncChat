@@ -44,6 +44,8 @@ public class Common extends SeleneseTestBase {
     public static String configPropertyFilePath = "/data/input/ConfigurationSetUp.properties";
     static String regressionFilePath, regressionStatusSheet, regressionFileOut;
 
+    public static WebDriver driver;
+    
     public void getProperties() throws Exception{
         propertyIs = getClass().getResourceAsStream(Common.propertyFilePath);
         Properties prop = new Properties();
@@ -54,7 +56,7 @@ public class Common extends SeleneseTestBase {
         regressionInp = getClass().getResourceAsStream(regressionFilePath);
     }
 
-    public static WebDriver driver;
+    
 
     public static void setUpVLO(String browser,String URL) {
         ProfilesIni allProfiles = new ProfilesIni();
@@ -65,8 +67,13 @@ public class Common extends SeleneseTestBase {
         } else {
             System.out.println("Please selenium.select one of these browser:\nfirefox\nchrome");
             return;
-        }
-        driver.get(URL);
+        }    
+        
+        openBrowser(URL);
+    }
+    
+    public static void openBrowser(String URL) {
+    	driver.get(URL);
 
         //driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         //Setting the default PageLoad Time out to 2 Mins
@@ -76,7 +83,7 @@ public class Common extends SeleneseTestBase {
 
         driver.manage().window().maximize();
     }
-
+    
     /* Common methods for UI */
     public static void waitForPageToLoad(String timeout)
     {
@@ -337,11 +344,11 @@ public class Common extends SeleneseTestBase {
 
 
     /* Browser interaction methods */
-    public static void openBrowser(String syncChatUrl) {
-        driver = new FirefoxDriver();
-        driver.get(syncChatUrl);
-        driver.manage().window().maximize();
-    }
+//    public static void openBrowser(String syncChatUrl) {
+//        driver = new FirefoxDriver();
+//        driver.get(syncChatUrl);
+//        driver.manage().window().maximize();
+//    }
 
     public static void closeBrowser() {
         driver.close();

@@ -74,6 +74,22 @@ public class HomeConstants {
          * Join existing chat room as subscriber
          */
         JOIN_SUBSCRIBER("", "", "//input[@value='Join an existing chat room']", ""),
+        /**
+         * Record button (with red circle)
+         */
+        RECORD_BTN("", "", "//div[@id='recordButton']", ""),
+        /**
+         * Button to submit for grading
+         */
+        GRADING_BTN("", "", "//span[contains(., 'FINISH: Submit for Grading')]", ""),
+        /**
+         * Finish button
+         */
+        FINISH_BTN("", "", "//span[contains(., 'Finish')]", ""),
+        /**
+         * Button to return to course
+         */
+        RETURN_TO_COURSE("", "", "//span[contains(., 'Return to Course')]", ""),
 
         ;
         private  String id;
