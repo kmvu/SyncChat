@@ -8,10 +8,4 @@
         </classes>
     </test>
 
-    <!--<test name="Deny_invitation" preserve-order="true">-->
-        <!--<classes>-->
-            <!--<class name="com.pearson.pegasus.syncChat.Home.SC_PublisherAndSubscriberCommunication"></class>-->
-            <!--<class name="com.pearson.pegasus.syncChat.Home.SC_VerifyCreateAndJoinChatVideoDenied"></class>-->
-        <!--</classes>-->
-    <!--</test>-->
 </suite>

@@ -1,5 +1,6 @@
 package com.pearson.pegasus.syncChat.Home;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Set;
 
@@ -22,7 +23,7 @@ public class SC_PublisherAndSubscriberCommunication extends Common {
     private final String subscriberAccount = "chaos_avchat_stud_1";
 
     private static WebDriver driver_old;
-    
+
     @BeforeTest
     public void setup() {
         Common.setUpVLO("*firefox", "http://mylabs.px.pearsoned.com/Pegasus/frmLogin.aspx?logout=1&s=3");
@@ -42,6 +43,9 @@ public class SC_PublisherAndSubscriberCommunication extends Common {
          * 3/ Wait and click to confirm permission to share video */
         Common.popUpSwitch(HomeConstants.HomePage.OPEN_DROPDOWN_ITEM.byLocator());
 
+        ArrayList<String> array = new ArrayList<String>(Common.driver.getWindowHandles());
+        System.out.println("First: " + array.get(array.size() - 1));
+
         Common.clickAndWait(HomeConstants.HomePage.JOIN_CREATE_BTN.byLocator());
         Thread.sleep(2000);
     }
@@ -60,6 +64,9 @@ public class SC_PublisherAndSubscriberCommunication extends Common {
         Common.popUpSwitch(HomeConstants.HomePage.OPEN_DROPDOWN_ITEM.byLocator());
 
         if (Common.isElementPresent(HomeConstants.HomePage.WELCOME_TITLE.byLocator())) {
+            ArrayList<String> array = new ArrayList<String>(Common.driver.getWindowHandles());
+            System.out.println("Second: " + array.get(array.size() - 1)); // this is to print out the list of current windows
+
             Common.clickAndWait(HomeConstants.HomePage.JOIN_SUBSCRIBER.byLocator());
 
             // Waiting for the list of created rooms to display and select the appropriate one
@@ -74,7 +81,7 @@ public class SC_PublisherAndSubscriberCommunication extends Common {
         Thread.sleep(2000);
 
         /**************************************************************************************
-         * Wendy - the following is for reference, if you want to use the invite functionality *
+         * Wendy - the following is for your reference, if you want to use the invite functionality.
          **************************************************************************************/
 
         /* Waiting for Subscriber to login */
@@ -103,7 +110,8 @@ public class SC_PublisherAndSubscriberCommunication extends Common {
         while (it.hasNext()) window = it.next();
 
         Thread.sleep(2000);
-        driver_old.switchTo().window(window);
+        System.out.println("Switching back: " + window);
+        driver.switchTo().window(window); // this is where I want to switch back to the original window popup, but it doesn't work
         Thread.sleep(5000);
         Common.clickAndWait(HomeConstants.HomePage.RECORD_BTN.byLocator());
 

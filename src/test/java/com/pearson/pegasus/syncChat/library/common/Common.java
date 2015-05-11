@@ -60,7 +60,7 @@ public class Common extends SeleneseTestBase {
 
     public static void setUpVLO(String browser,String URL) {
         ProfilesIni allProfiles = new ProfilesIni();
-        FirefoxProfile profile = allProfiles.getProfile("WebDriver_SyncChat");
+        FirefoxProfile profile = allProfiles.getProfile("SyncChat_profile");
     	
         if (browser.equals("*firefox")) {
             driver = new FirefoxDriver(profile);
