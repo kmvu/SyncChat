@@ -19,14 +19,30 @@ public class SC_PublisherAndSubscriberCommunication extends Common {
 
     private SoftAssert softAssert = new SoftAssert();
 
-    private final String publisherAccount = "chaos_avchat_stud_2";
-    private final String subscriberAccount = "chaos_avchat_stud_1";
+    private final String publisherAccount_prod = "chaos_avchat_stud_2";
+    private final String subscriberAccount_prod = "chaos_avchat_stud_1";
+    private final String publisherAccount_staging = "peg_ppe_hed_core_stud_1";
+    private final String subscriberAccount_staging = "peg_ppe_hed_core_stud_2";
+
+    private String publisherAccount;
+    private String subscriberAccount;
+
+    private String environment = System.getProperty("environment");
+    private String browser = System.getProperty("browser");
 
     private static WebDriver driver_old;
 
     @BeforeTest
     public void setup() {
-        Common.setUpVLO("*firefox", "http://mylabs.px.pearsoned.com/Pegasus/frmLogin.aspx?logout=1&s=3");
+        if (this.environment.equals("staging")) {
+            publisherAccount = publisherAccount_staging;
+            subscriberAccount = subscriberAccount_staging;
+            Common.setUpVLO(this.browser, "http://mylabs.px.ppe.pearsoncmg.com/");
+        } else if (this.environment.equals("production")) {
+            publisherAccount = publisherAccount_prod;
+            subscriberAccount = subscriberAccount_prod;
+            Common.setUpVLO(this.browser, "http://mylabs.px.pearsoned.com/Pegasus/frmLogin.aspx?logout=1&s=3");
+        }
     }
 
     @Test
@@ -47,6 +63,11 @@ public class SC_PublisherAndSubscriberCommunication extends Common {
         System.out.println("First: " + array.get(array.size() - 1));
 
         Common.clickAndWait(HomeConstants.HomePage.JOIN_CREATE_BTN.byLocator());
+
+        // Need to click OK button in Staging environment
+        if (this.environment.equals("staging"))
+            Common.clickAndWait(HomeConstants.HomePage.OK_BTN.byLocator());
+
         Thread.sleep(2000);
     }
 
@@ -70,7 +91,13 @@ public class SC_PublisherAndSubscriberCommunication extends Common {
             Common.clickAndWait(HomeConstants.HomePage.JOIN_SUBSCRIBER.byLocator());
 
             // Waiting for the list of created rooms to display and select the appropriate one
-            String tempLoc = "//td[contains(., 'chaos_avchat_stud_2 chaos_avchat_stud_2')]";
+            String tempLoc = "";
+            if (System.getProperty("environment").equals("production")) {
+                tempLoc = "//td[contains(., 'chaos_avchat_stud_2 chaos_avchat_stud_2')]";
+            } else if (System.getProperty("environment").equals("staging")) {
+                tempLoc = "//td[contains(., 'PEG_PPE_HED_Core_Stud_1 PEG_PPE_HED_Core_Stud_1')]";
+            }
+
             Common.waitForElementPresent(tempLoc);
             Common.clickAndWait(tempLoc + "//following-sibling::td/input");
         } else {
@@ -78,6 +105,11 @@ public class SC_PublisherAndSubscriberCommunication extends Common {
         }
         Thread.sleep(2000);
         Common.clickAndWait(HomeConstants.HomePage.JOIN_CREATE_BTN.byLocator());
+
+        // Need to click OK button in Staging environment
+        if (this.environment.equals("staging"))
+            Common.clickAndWait(HomeConstants.HomePage.OK_BTN.byLocator());
+
         Thread.sleep(2000);
 
         /**************************************************************************************

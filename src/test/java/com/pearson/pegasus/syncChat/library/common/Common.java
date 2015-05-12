@@ -62,7 +62,7 @@ public class Common extends SeleneseTestBase {
         ProfilesIni allProfiles = new ProfilesIni();
         FirefoxProfile profile = allProfiles.getProfile("SyncChat_profile");
     	
-        if (browser.equals("*firefox")) {
+        if (browser.equals("firefox")) {
             driver = new FirefoxDriver(profile);
         } else {
             System.out.println("Please selenium.select one of these browser:\nfirefox\nchrome");

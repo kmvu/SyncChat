@@ -23,9 +23,13 @@ public class HomeConstants {
          */
         HOME_TITLE("", "", "//span[contains(text(), 'My Courses and Testbanks')]", ""),
         /**
-         * Course title
+         * Course title in production
          */
-        COURSE_TITLE("", "", "//a[contains(., 'Chaos Course1 PE AVChat Section 1')]", ""),
+        COURSE_TITLE_PROD("", "", "//a[contains(., 'Chaos Course1 PE AVChat Section 1')]", ""),
+        /**
+         * Course title in staging
+         */
+        COURSE_TITLE_STG("", "", "//a[contains(., 'Admin PE AVChat Section 1')]", ""),
         /**
          * Assignment tab
          */

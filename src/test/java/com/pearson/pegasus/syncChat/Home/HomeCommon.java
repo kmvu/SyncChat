@@ -1,6 +1,7 @@
 package com.pearson.pegasus.syncChat.Home;
 
 import com.pearson.pegasus.syncChat.library.common.Common;
+import org.omg.Messaging.SYNC_WITH_TRANSPORT;
 import org.testng.asserts.SoftAssert;
 
 import java.util.ArrayList;
@@ -38,7 +39,12 @@ public class HomeCommon extends Common {
         softAssert.assertTrue(titlePresent, "Login not successfull!");
 
         /* Choosing the course */
-        Common.clickAndWait(HomeConstants.HomePage.COURSE_TITLE.byLocator());
+        if (System.getProperty("environment").equals("staging")) {
+            Common.clickAndWait(HomeConstants.HomePage.COURSE_TITLE_STG.byLocator());
+        } else if (System.getProperty("environment").equals("production")) {
+            Common.clickAndWait(HomeConstants.HomePage.COURSE_TITLE_PROD.byLocator());
+        }
+
         Common.clickAndWait(HomeConstants.HomePage.ASSIGNMENT_TAB.byLocator());
 
         /* Make sure user clicked on Assignments link and currently located in "To do" tab */
@@ -66,7 +72,11 @@ public class HomeCommon extends Common {
     /* Subscriber actions */
     public static SoftAssert subscriberLogin(String subscriberAccount, SoftAssert softAssert) throws InterruptedException {
         /* Open a new session for Subscriber */
-        Common.setUpVLO("*firefox", "http://mylabs.px.pearsoned.com/Pegasus/frmLogin.aspx?logout=1&s=3");
+        if (System.getProperty("environment").equals("staging")) {
+            Common.setUpVLO(System.getProperty("browser"), "http://mylabs.px.ppe.pearsoncmg.com/");
+        } else if (System.getProperty("environment").equals("production")) {
+            Common.setUpVLO(System.getProperty("browser"), "http://mylabs.px.pearsoned.com/Pegasus/frmLogin.aspx?logout=1&s=3");
+        }
     	
         /* Login as invited Subscriber */
         HomeCommon.loginFromHome(subscriberAccount.toLowerCase());
