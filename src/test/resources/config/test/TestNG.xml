@@ -1,0 +1,8 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="Parallel test runs" parallel="tests">
+
+    <suite-files>
+        <suite-file path="./EndToEnd_Scenario.xml" />
+    </suite-files>
+
+</suite>
