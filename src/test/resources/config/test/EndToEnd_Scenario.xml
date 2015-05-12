@@ -1,10 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
-<suite name="EndToEnd_Scenario" preserve-order="true">
+<suite name="End To End Scenario" parallel="tests" thread-count="4" preserve-order="true">
 
-    <test name="Create_room" preserve-order="true">
+    <test name="Test_1">
         <classes>
-        	<class name="com.pearson.pegasus.syncChat.Home.SC_PublisherAndSubscriberCommunication"></class>
+            <class name="com.pearson.pegasus.syncChat.Home.SC_Publisher"></class>
+        </classes>
+    </test>
+
+    <test name="Test_2">
+        <classes>
+            <class name="com.pearson.pegasus.syncChat.Home.SC_Subscriber"></class>
         </classes>
     </test>
 

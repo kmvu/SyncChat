@@ -15,7 +15,7 @@ public class HomeConstants {
          */
         PASSWORD_TXTBOX("","","//input[@id='password']",""),
         /**
-         * Password textbox
+         * Submit button
          */
         SUBMIT_BTN("","","//button[contains(., 'Sign In')]",""),
         /**

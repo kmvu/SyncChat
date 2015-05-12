@@ -18,9 +18,15 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Reporter;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.AfterTest;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.BeforeTest;
 
 import java.io.File;
 import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Properties;
@@ -44,8 +50,35 @@ public class Common extends SeleneseTestBase {
     public static String configPropertyFilePath = "/data/input/ConfigurationSetUp.properties";
     static String regressionFilePath, regressionStatusSheet, regressionFileOut;
 
-    public static WebDriver driver;
-    
+    public static WebDriver driver = null;
+
+    protected static ThreadLocal<RemoteWebDriver> threadDriver = null;
+
+    @BeforeTest
+    public void setUp() throws MalformedURLException {
+        threadDriver = new ThreadLocal<RemoteWebDriver>();
+        DesiredCapabilities capabilities = new DesiredCapabilities();
+
+        ProfilesIni allProfiles = new ProfilesIni();
+        FirefoxProfile profile = allProfiles.getProfile("SyncChat_profile");
+
+        capabilities.setCapability(FirefoxDriver.PROFILE, profile);
+        capabilities.setBrowserName(DesiredCapabilities.firefox().getBrowserName());
+
+        threadDriver.set(new RemoteWebDriver(new URL("http://localhost:4444/wd/hub"), capabilities));
+
+        driver = getDriver();
+    }
+
+    public static WebDriver getDriver() {
+        return threadDriver.get();
+    }
+
+    @AfterTest
+    public void closeBrowser() {
+        getDriver().quit();
+    }
+
     public void getProperties() throws Exception{
         propertyIs = getClass().getResourceAsStream(Common.propertyFilePath);
         Properties prop = new Properties();
@@ -56,9 +89,7 @@ public class Common extends SeleneseTestBase {
         regressionInp = getClass().getResourceAsStream(regressionFilePath);
     }
 
-    
-
-    public static void setUpVLO(String browser,String URL) {
+    public static void setUpVLO(String browser, String URL) {
         ProfilesIni allProfiles = new ProfilesIni();
         FirefoxProfile profile = allProfiles.getProfile("SyncChat_profile");
     	
@@ -341,18 +372,4 @@ public class Common extends SeleneseTestBase {
 
         return by;
     }
-
-
-    /* Browser interaction methods */
-//    public static void openBrowser(String syncChatUrl) {
-//        driver = new FirefoxDriver();
-//        driver.get(syncChatUrl);
-//        driver.manage().window().maximize();
-//    }
-
-    public static void closeBrowser() {
-        driver.close();
-        driver.quit();
-    }
-
 }
