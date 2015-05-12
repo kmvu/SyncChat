@@ -1,16 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
-<suite name="End To End Scenario" parallel="tests" thread-count="4" preserve-order="true">
+<suite name="End To End Scenario" parallel="methods">
+    <listeners>
+        <listener class-name="com.pearson.pegasus.syncChat.library.common.WebDriverListener"></listener>
+    </listeners>
 
-    <test name="Test_1">
+    <test name="Test">
+        <parameter name="browserName" value="firefox"></parameter>
         <classes>
             <class name="com.pearson.pegasus.syncChat.Home.SC_Publisher"></class>
-        </classes>
-    </test>
-
-    <test name="Test_2">
-        <classes>
-            <class name="com.pearson.pegasus.syncChat.Home.SC_Subscriber"></class>
         </classes>
     </test>
 

@@ -1,6 +1,7 @@
 package com.pearson.pegasus.syncChat.Home;
 
 import com.pearson.pegasus.syncChat.library.common.Common;
+import com.pearson.pegasus.syncChat.library.common.LocalDriverManager;
 import org.omg.Messaging.SYNC_WITH_TRANSPORT;
 import org.testng.asserts.SoftAssert;
 
@@ -71,13 +72,21 @@ public class HomeCommon extends Common {
         return Common.invitationHandler(false);
     }
 
+    private static void invokeBrowser(String url) {
+        System.out.println("Thread id = " + Thread.currentThread().getId());
+        System.out.println("Hashcode of webDriver instance = " + LocalDriverManager.getDriver().hashCode());
+        LocalDriverManager.getDriver().get(url);
+    }
+
     /* Subscriber actions */
     public static SoftAssert subscriberLogin(String subscriberAccount, SoftAssert softAssert) throws InterruptedException {
         /* Open a new session for Subscriber */
         if (environment.equals("staging")) {
-            getDriver().get("http://mylabs.px.ppe.pearsoncmg.com/");
+//            getDriver().get("http://mylabs.px.ppe.pearsoncmg.com/");
+            invokeBrowser("http://mylabs.px.ppe.pearsoncmg.com/");
         } else if (environment.equals("production")) {
-            getDriver().get("http://mylabs.px.pearsoned.com/Pegasus/frmLogin.aspx?logout=1&s=3");
+//            getDriver().get("http://mylabs.px.pearsoned.com/Pegasus/frmLogin.aspx?logout=1&s=3");
+            invokeBrowser("http://mylabs.px.pearsoned.com/Pegasus/frmLogin.aspx?logout=1&s=3");
         }
     	
         /* Login as invited Subscriber */

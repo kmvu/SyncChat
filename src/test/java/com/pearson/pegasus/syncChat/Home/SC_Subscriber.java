@@ -1,6 +1,7 @@
 package com.pearson.pegasus.syncChat.Home;
 
 import com.pearson.pegasus.syncChat.library.common.Common;
+import com.pearson.pegasus.syncChat.library.common.LocalDriverManager;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
@@ -21,14 +22,22 @@ public class SC_Subscriber extends Common {
 
     private SoftAssert softAssert = new SoftAssert();
 
+    private void invokeBrowser(String url) {
+        System.out.println("Thread id = " + Thread.currentThread().getId());
+        System.out.println("Hashcode of webDriver instance = " + LocalDriverManager.getDriver().hashCode());
+        LocalDriverManager.getDriver().get(url);
+    }
+
     @BeforeMethod
     public void setup() {
         if (this.environment.equals("staging")) {
             subscriberAccount = subscriberAccount_staging;
-            getDriver().get("http://mylabs.px.ppe.pearsoncmg.com/");
+//            getDriver().get("http://mylabs.px.ppe.pearsoncmg.com/");
+            invokeBrowser("http://mylabs.px.ppe.pearsoncmg.com/");
         } else if (this.environment.equals("production")) {
             subscriberAccount = subscriberAccount_prod;
-            getDriver().get("http://mylabs.px.pearsoned.com/Pegasus/frmLogin.aspx?logout=1&s=3");
+//            getDriver().get("http://mylabs.px.pearsoned.com/Pegasus/frmLogin.aspx?logout=1&s=3");
+            invokeBrowser("http://mylabs.px.pearsoned.com/Pegasus/frmLogin.aspx?logout=1&s=3");
         }
     }
 

@@ -50,34 +50,7 @@ public class Common extends SeleneseTestBase {
     public static String configPropertyFilePath = "/data/input/ConfigurationSetUp.properties";
     static String regressionFilePath, regressionStatusSheet, regressionFileOut;
 
-    public static WebDriver driver = null;
-
-    protected static ThreadLocal<RemoteWebDriver> threadDriver = null;
-
-    @BeforeTest
-    public void setUp() throws MalformedURLException {
-        threadDriver = new ThreadLocal<RemoteWebDriver>();
-        DesiredCapabilities capabilities = new DesiredCapabilities();
-
-        ProfilesIni allProfiles = new ProfilesIni();
-        FirefoxProfile profile = allProfiles.getProfile("SyncChat_profile");
-
-        capabilities.setCapability(FirefoxDriver.PROFILE, profile);
-        capabilities.setBrowserName(DesiredCapabilities.firefox().getBrowserName());
-
-        threadDriver.set(new RemoteWebDriver(new URL("http://localhost:4444/wd/hub"), capabilities));
-
-        driver = getDriver();
-    }
-
-    public static WebDriver getDriver() {
-        return threadDriver.get();
-    }
-
-    @AfterTest
-    public void closeBrowser() {
-        getDriver().quit();
-    }
+    public static WebDriver driver;
 
     public void getProperties() throws Exception{
         propertyIs = getClass().getResourceAsStream(Common.propertyFilePath);
@@ -89,18 +62,21 @@ public class Common extends SeleneseTestBase {
         regressionInp = getClass().getResourceAsStream(regressionFilePath);
     }
 
-    public static void setUpVLO(String browser, String URL) {
-        ProfilesIni allProfiles = new ProfilesIni();
-        FirefoxProfile profile = allProfiles.getProfile("SyncChat_profile");
-    	
-        if (browser.equals("firefox")) {
-            driver = new FirefoxDriver(profile);
-        } else {
-            System.out.println("Please selenium.select one of these browser:\nfirefox\nchrome");
-            return;
-        }    
-        
-        openBrowser(URL);
+    public static void setUpVLO() {
+//        ProfilesIni allProfiles = new ProfilesIni();
+//        FirefoxProfile profile = allProfiles.getProfile("SyncChat_profile");
+
+        driver = LocalDriverManager.getDriver();
+//        if (browser.equals("firefox")) {
+//            driver = new FirefoxDriver(profile);
+//        } else {
+//            System.out.println("Please selenium.select one of these browser:\nfirefox\nchrome");
+//            return;
+//        }
+
+
+
+//        openBrowser(URL);
     }
     
     public static void openBrowser(String URL) {
