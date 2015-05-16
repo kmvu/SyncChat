@@ -1,80 +1,43 @@
 package com.pearson.pegasus.syncChat.Home;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Set;
-
-import org.openqa.selenium.WebDriver;
-import org.testng.annotations.AfterTest;
+import com.pearson.pegasus.syncChat.library.common.Common;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
 
-import com.pearson.pegasus.syncChat.library.common.Common;
+import java.util.ArrayList;
 
 /**
- * Created by KhangVu on 4/13/15.
+ * Created by KhangVu on 5/15/15.
  */
-public class SC_PublisherAndSubscriberCommunication extends Common {
+public class SC_Subscriber {
 
     private SoftAssert softAssert = new SoftAssert();
-
-    private final String publisherAccount_prod = "chaos_avchat_stud_2";
-    private final String subscriberAccount_prod = "chaos_avchat_stud_1";
-    private final String publisherAccount_staging = "peg_ppe_hed_core_stud_1";
-    private final String subscriberAccount_staging = "peg_ppe_hed_core_stud_2";
-
-    private String publisherAccount;
-    private String subscriberAccount;
 
     private String environment = System.getProperty("environment");
     private String browser = System.getProperty("browser");
 
-    private static WebDriver driver_old;
+    private final String subscriberAccount_prod = "chaos_avchat_stud_1";
+    private final String subscriberAccount_staging = "peg_ppe_hed_core_stud_2";
+
+    private final String chatRoom_locator_stg = "chaos_avchat_stud_2 chaos_avchat_stud_2')]";
+    private final String chatRoom_locator_prod = "PEG_PPE_HED_Core_Stud_1 PEG_PPE_HED_Core_Stud_1";
+
+    private String subscriberAccount;
 
     @BeforeTest
     public void setup() {
         if (this.environment.equals("staging")) {
-            publisherAccount = publisherAccount_staging;
             subscriberAccount = subscriberAccount_staging;
             Common.setUpVLO(this.browser, "http://mylabs.px.ppe.pearsoncmg.com/");
         } else if (this.environment.equals("production")) {
-            publisherAccount = publisherAccount_prod;
             subscriberAccount = subscriberAccount_prod;
             Common.setUpVLO(this.browser, "http://mylabs.px.pearsoned.com/Pegasus/frmLogin.aspx?logout=1&s=3");
         }
     }
 
     @Test
-    public void testLoginAsPublisher() throws InterruptedException {
-        HomeCommon.loginFromHome(publisherAccount);
-        HomeCommon.setupBeforeVideoChat(softAssert);
-
-        /* Select the video by selecting the dropdown menu */
-        Common.switchToFrame(1);
-        Common.clickAndWait(HomeConstants.HomePage.DROPDOWN_VIDEO_MENU.byLocator());
-
-        /* 1/ Switch window handle to pop-up video chat window
-         * 2/ Wait click on "Create Room" button to present
-         * 3/ Wait and click to confirm permission to share video */
-        Common.popUpSwitch(HomeConstants.HomePage.OPEN_DROPDOWN_ITEM.byLocator());
-
-        ArrayList<String> array = new ArrayList<String>(Common.driver.getWindowHandles());
-        System.out.println("First: " + array.get(array.size() - 1));
-
-        Common.clickAndWait(HomeConstants.HomePage.JOIN_CREATE_BTN.byLocator());
-
-        // Need to click OK button in Staging environment
-        if (this.environment.equals("staging"))
-            Common.clickAndWait(HomeConstants.HomePage.OK_BTN.byLocator());
-
-        Thread.sleep(2000);
-    }
-
-    @Test(dependsOnMethods = "testLoginAsPublisher")
     public void testLoginAsSubscriberAndJoinChatRoom() throws InterruptedException {
-    	driver_old = Common.driver;
-    	
         /* Login as another subscriber to join the created room chat */
         HomeCommon.subscriberLogin(subscriberAccount, softAssert);
 
@@ -84,18 +47,20 @@ public class SC_PublisherAndSubscriberCommunication extends Common {
 
         Common.popUpSwitch(HomeConstants.HomePage.OPEN_DROPDOWN_ITEM.byLocator());
 
+        Thread.sleep(10000);
+
         if (Common.isElementPresent(HomeConstants.HomePage.WELCOME_TITLE.byLocator())) {
             ArrayList<String> array = new ArrayList<String>(Common.driver.getWindowHandles());
-            System.out.println("Second: " + array.get(array.size() - 1)); // this is to print out the list of current windows
+            System.out.println("Current list of windows: " + array.get(array.size() - 1)); // this is to print out the list of current windows
 
             Common.clickAndWait(HomeConstants.HomePage.JOIN_SUBSCRIBER.byLocator());
 
             // Waiting for the list of created rooms to display and select the appropriate one
             String tempLoc = "";
             if (System.getProperty("environment").equals("production")) {
-                tempLoc = "//td[contains(., 'chaos_avchat_stud_2 chaos_avchat_stud_2')]";
+                tempLoc = "//td[contains(., "+ chatRoom_locator_prod + ")]";
             } else if (System.getProperty("environment").equals("staging")) {
-                tempLoc = "//td[contains(., 'PEG_PPE_HED_Core_Stud_1 PEG_PPE_HED_Core_Stud_1')]";
+                tempLoc = "//td[contains(., "+ chatRoom_locator_stg + ")]";
             }
 
             Common.waitForElementPresent(tempLoc);
@@ -127,34 +92,5 @@ public class SC_PublisherAndSubscriberCommunication extends Common {
 //        Thread.sleep(4000);
 //
 //        HomeCommon.subscriberAcceptInvitation();
-    }
-
-    @Test(dependsOnMethods = "testLoginAsSubscriberAndJoinChatRoom")
-    public void testRecordingAndSubmitForGrading() throws InterruptedException {
-        /* After joining the room chat with Publisher:
-         * 1 - Click on the "Record button" to record
-         * 2 - Waiting for 10 seconds to recording
-         * 3 - Submit for grading */
-
-    	Set<String> set = driver_old.getWindowHandles();
-    	Iterator<String> it = set.iterator();
-        String window = null;
-        while (it.hasNext()) window = it.next();
-
-        Thread.sleep(2000);
-        System.out.println("Switching back: " + window);
-        driver.switchTo().window(window); // this is where I want to switch back to the original window popup, but it doesn't work
-        Thread.sleep(5000);
-        Common.clickAndWait(HomeConstants.HomePage.RECORD_BTN.byLocator());
-
-        Thread.sleep(10000);
-
-        HomeCommon.submitForGrading();
-    }
-
-    @AfterTest
-    public void tearDown() {
-        Common.closeBrowser();
-        softAssert.assertAll();
     }
 }

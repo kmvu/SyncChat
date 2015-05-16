@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="EndToEnd_Scenario" preserve-order="true">
+
+    <test name="Create_room" preserve-order="true">
+        <classes>
+        	<class name="com.pearson.pegasus.syncChat.Home.SC_Publisher"></class>
+        </classes>
+    </test>
+
+</suite>
